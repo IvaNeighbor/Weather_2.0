@@ -13,8 +13,6 @@ namespace Погодка
         public double Temperature { get; set; }
         public string Precipitation { get; set; }
         public int Pressure { get; set; }
-
-        // Додаткове поле для виводу у форматі "день.місяць"
         public string Date => $"{Day:D2}.{Month:D2}";
     }
 }

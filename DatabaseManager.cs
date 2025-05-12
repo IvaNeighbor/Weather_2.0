@@ -9,7 +9,7 @@ namespace Погодка
 {
     public class DatabaseManager
     {
-        string connectionString = "server=127.0.1.1;port=3306;database=WeatherData;User id=root;pwd=234234234;";
+        string connectionString = "server=127.0.0.1;port=3306;database=WeatherData;User id=root;pwd=234234234;";
 
 
         public List<WeatherInfo> GetAllWeatherData()
@@ -20,7 +20,10 @@ namespace Погодка
             {
                 connection.Open();
 
-                string query = "SELECT Day, Month, Temperature, Precipitation, Pressure FROM weather";
+                // Оновлений запит SELECT з ORDER BY
+                string query = "SELECT Day, Month, Temperature, Precipitation, Pressure FROM weather ORDER BY Month ASC, Day ASC";
+                // ASC означає сортування за зростанням (від меншого до більшого)
+
                 using (var command = new MySqlCommand(query, connection))
                 using (var reader = command.ExecuteReader())
                 {
@@ -30,9 +33,9 @@ namespace Погодка
                         {
                             Day = reader.GetInt32("Day"),
                             Month = reader.GetInt32("Month"),
-                            Temperature = reader.GetDouble("Temperature"),
-                            Precipitation = reader.GetBoolean("Precipitation") ? "Так" : "Ні",
-                            Pressure = reader.GetInt32("Pressure")
+                            Temperature = reader.GetDouble("Temperature"), // Переконайтеся, що Temperature в базі даних має числовий тип
+                            Precipitation = reader.GetBoolean("Precipitation") ? "Так" : "Ні", // Це читає 0/1 як булеве
+                            Pressure = reader.GetInt32("Pressure") // Переконайтеся, що Pressure в базі даних має числовий тип
                         };
 
                         weatherData.Add(weather);
@@ -42,6 +45,5 @@ namespace Погодка
 
             return weatherData;
         }
-
     }
 }

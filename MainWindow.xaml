@@ -183,19 +183,11 @@
               CanUserDeleteRows="False"
               CanUserReorderColumns="False"
               CanUserResizeRows="False"
-              CanUserSortColumns="True">
+              CanUserSortColumns="True"
+              HeadersVisibility="Column">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="*"/>
-                    <DataGridTemplateColumn Header="Температура" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Temperature}" Margin="0,0,5,0"/>
-                                    <TextBlock Text="°C"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Температура" Binding="{Binding Temperature, StringFormat={}{0} °C}" Width="*"/>
                     <DataGridTextColumn Header="Опади" Binding="{Binding Precipitation}" Width="*"/>
                     <DataGridTextColumn Header="Тиск" Binding="{Binding Pressure}" Width="*"/>
                 </DataGrid.Columns>

@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace Погодка
 {
-    /// <summary>
-    /// Interaction logic for LoginWindow.xaml
-    /// </summary>
     public partial class LoginWindow : Window
     {
         public LoginWindow()
@@ -31,20 +28,19 @@ namespace Погодка
 
             if (username == "admin" && password == "1111")
             {
-                // Просто оновлюємо роль у головному вікні
                 if (Application.Current.MainWindow is MainWindow mainWindow)
                 {
-                    mainWindow.SetUserRole("admin"); // Встановлюємо роль для admin
+                    mainWindow.SetUserRole("admin");
                 }
-                this.Close(); // Закриваємо вікно авторизації
+                this.Close();
             }
             else if (username == "user" && password == "1111")
             {
                 if (Application.Current.MainWindow is MainWindow mainWindow)
                 {
-                    mainWindow.SetUserRole("user"); // Встановлюємо роль для user
+                    mainWindow.SetUserRole("user");
                 }
-                this.Close(); // Закриваємо вікно авторизації
+                this.Close();
             }
             else
             {

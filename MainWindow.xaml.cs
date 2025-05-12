@@ -17,17 +17,16 @@ namespace Погодка
             FileButton.Click += FileButton_Click;
         }
 
-        // Оновлюємо роль користувача та доступ до кнопок
         public void SetUserRole(string role)
         {
-            userRole = role; // Присвоюємо роль користувача
+            userRole = role;
             if (userRole == "admin")
             {
-                EditButton.IsEnabled = true; // Доступно для admin
+                EditButton.IsEnabled = true;
             }
             else
             {
-                EditButton.IsEnabled = false; // Недоступно для user
+                EditButton.IsEnabled = false;
             }
         }
 
@@ -43,6 +42,7 @@ namespace Погодка
             {
                 EditWeatherWindow editWindow = new EditWeatherWindow();
                 editWindow.ShowDialog();
+                LoadWeatherData();
             }
             else
             {
@@ -94,7 +94,7 @@ namespace Погодка
                 WeatherDataGrid.ItemsSource = null;
             }
         
-    }
+        }
     }
 
 }
