@@ -110,7 +110,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="10, 10, 0, 10" Background="#DDDDDD" VerticalAlignment="Top" x:Name="FilterPanel">
+            <StackPanel Grid.Column="0" Margin="10,10,0,0" Background="#DDDDDD" VerticalAlignment="Top" x:Name="FilterPanel" Height="216">
                 <TextBlock Text="Фільтрація"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Top"
@@ -168,10 +168,10 @@
                         <ComboBoxItem Content="30"/>
                         <ComboBoxItem Content="31"/>
                     </ComboBox>
-
                     <Button Content="Застосувати фільтри"
-                            x:Name="ApplyFilterButton" Style="{StaticResource ApplyFilterButtonStyle}"/>
+                            x:Name="ApplyFilterButton" Style="{StaticResource ApplyFilterButtonStyle}" RenderTransformOrigin="0.627,1.654" Height="32"/>
                 </StackPanel>
+                <Button Content="Очистити фільтри" x:Name="ClearFilterButton" Style="{StaticResource ApplyFilterButtonStyle}" Background="#FF595959" RenderTransformOrigin="0.508,-0.49" Width="160" Height="20.62" Margin="0,0,0,0" BorderBrush="#FF384A8E" />
             </StackPanel>
 
             <DataGrid x:Name="WeatherDataGrid"
@@ -184,7 +184,7 @@
               CanUserReorderColumns="False"
               CanUserResizeRows="False"
               CanUserSortColumns="True"
-              HeadersVisibility="Column">
+              HeadersVisibility="Column" Background="White">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="*"/>
                     <DataGridTextColumn Header="Температура" Binding="{Binding Temperature, StringFormat={}{0} °C}" Width="*"/>

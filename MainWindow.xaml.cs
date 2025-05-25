@@ -6,6 +6,7 @@ namespace Погодка
     public partial class MainWindow : Window
     {
         private string userRole;
+        DatabaseManager dbManager = new DatabaseManager();
 
         public MainWindow()
         {
@@ -15,6 +16,9 @@ namespace Погодка
             EditButton.Click += EditButton_Click;
             FilterButton.Click += FilterButton_Click;
             FileButton.Click += FileButton_Click;
+            ApplyFilterButton.Click += ApplyFilterButton_Click;
+            ClearFilterButton.Click += ClearFilterButton_Click;
+
         }
 
         public void SetUserRole(string role)
@@ -95,6 +99,52 @@ namespace Погодка
             }
         
         }
+
+        private void ApplyFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            int? selectedMonth = null;
+            int? selectedDay = null;
+
+            if (MonthComboBox.SelectedIndex >= 0)
+            {
+                // Місяці у комбоінбоксі з індексу 0 (Січень) = 1 у числовому форматі
+                selectedMonth = MonthComboBox.SelectedIndex + 1;
+            }
+
+            if (DayComboBox.SelectedIndex >= 0)
+            {
+                // Дні у комбоінбоксі з індексу 0 (1) = 1 у числовому форматі
+                selectedDay = DayComboBox.SelectedIndex + 1;
+            }
+
+            try
+            {
+                var filteredData = dbManager.GetFilteredWeatherData(selectedMonth, selectedDay);
+                WeatherDataGrid.ItemsSource = filteredData;
+
+                if (filteredData.Count == 0)
+                {
+                    MessageBox.Show("За вашим фільтром дані не знайдені.", "Результат фільтрації", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Помилка при завантаженні даних з фільтром:\n" + ex.Message,
+                                "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ClearFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Скидаємо вибір місяця та дня
+            MonthComboBox.SelectedIndex = -1;
+            DayComboBox.SelectedIndex = -1;
+
+            // Завантажуємо всі дані без фільтрації
+            LoadWeatherData();
+        }
+
+
     }
 
 }
