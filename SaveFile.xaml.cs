@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
 using System.IO;
 
@@ -19,13 +20,21 @@ namespace Погодка
 
         private void SaveFileButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!(MonthComboBox.SelectedItem is ComboBoxItem selectedMonth))
+            {
+                MessageBox.Show("Будь ласка, оберіть місяць.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            int selectedMonthNumber = int.Parse(selectedMonth.Tag.ToString());
+
             var weatherData = dbManager.GetAllWeatherData();
 
             StringBuilder content = new StringBuilder();
 
             if (SaveOption1CheckBox.IsChecked == true)
             {
-                // Фільтруємо дні, де температура > 0 і йшов дощ (Precipitation == "Так")
+                // Перша опція — без фільтрації по місяцю
                 var filteredDays = new List<string>();
                 foreach (var day in weatherData)
                 {
@@ -43,19 +52,22 @@ namespace Погодка
 
             if (SaveOption2CheckBox.IsChecked == true)
             {
-                if (weatherData.Count > 0)
+                // Друга опція — фільтруємо за вибраним місяцем
+                var monthData = weatherData.FindAll(day => day.Month == selectedMonthNumber);
+
+                if (monthData.Count > 0)
                 {
                     double avgTemp = 0;
                     double avgPressure = 0;
 
-                    foreach (var w in weatherData)
+                    foreach (var w in monthData)
                     {
                         avgTemp += w.Temperature;
                         avgPressure += w.Pressure;
                     }
 
-                    avgTemp /= weatherData.Count;
-                    avgPressure /= weatherData.Count;
+                    avgTemp /= monthData.Count;
+                    avgPressure /= monthData.Count;
 
                     content.AppendLine("Середньомісячна температура та середній тиск:");
                     content.AppendLine($" - Температура: {avgTemp:F1}°C");
@@ -63,7 +75,7 @@ namespace Погодка
                 }
                 else
                 {
-                    content.AppendLine("Дані відсутні для розрахунку середніх значень.");
+                    content.AppendLine("Дані відсутні для розрахунку середніх значень за обраний місяць.");
                 }
             }
 

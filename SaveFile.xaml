@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Погодка"
         mc:Ignorable="d"
-        Title="Збереження даних" Height="250" Width="400"
+        Title="Збереження даних" Height="300" Width="478"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -48,6 +48,7 @@
 
     <Grid Margin="15">
         <StackPanel Orientation="Vertical">
+
             <TextBlock Text="Оберіть дані для збереження(за місяць):"
                        FontSize="16"
                        FontWeight="Bold"
@@ -57,12 +58,36 @@
                       Content="Кількість днів та дати, коли температура > 0 та йшов дощ"
                       Margin="0,0,0,10"/>
 
-            <CheckBox x:Name="SaveOption2CheckBox"
-                      Content="Середньомісячна температура та середній тиск"
-                      Margin="0,0,0,20"/>
+            <!-- Рядок з чекбоксом і ComboBox для вибору місяця -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                <CheckBox x:Name="SaveOption2CheckBox"
+                          Content="Середньомісячна температура та середній тиск"
+                          VerticalAlignment="Center"/>
+
+                <TextBlock Width="15"/>
+
+                <ComboBox x:Name="MonthComboBox"
+                          Width="140"
+                          VerticalAlignment="Center"
+                          SelectedIndex="0"
+                          ToolTip="Оберіть місяць">
+                    <ComboBoxItem Content="Січень" Tag="1" />
+                    <ComboBoxItem Content="Лютий" Tag="2" />
+                    <ComboBoxItem Content="Березень" Tag="3" />
+                    <ComboBoxItem Content="Квітень" Tag="4" />
+                    <ComboBoxItem Content="Травень" Tag="5" />
+                    <ComboBoxItem Content="Червень" Tag="6" />
+                    <ComboBoxItem Content="Липень" Tag="7" />
+                    <ComboBoxItem Content="Серпень" Tag="8" />
+                    <ComboBoxItem Content="Вересень" Tag="9" />
+                    <ComboBoxItem Content="Жовтень" Tag="10" />
+                    <ComboBoxItem Content="Листопад" Tag="11" />
+                    <ComboBoxItem Content="Грудень" Tag="12" />
+                </ComboBox>
+            </StackPanel>
 
             <Button Content="Зберегти файл"
-                    x:Name="SaveFileButton" 
+                    x:Name="SaveFileButton"
                     Style="{StaticResource SaveFileButtonStyle}"/>
         </StackPanel>
     </Grid>
