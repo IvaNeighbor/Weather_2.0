@@ -9,6 +9,7 @@
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
+        <!-- Стиль кнопки -->
         <Style x:Key="SaveFileButtonStyle" TargetType="Button">
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="Margin" Value="0,20,0,0"/>
@@ -25,14 +26,13 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="8">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
                                               Content="{TemplateBinding Content}"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="#4CAF50"/>
@@ -43,6 +43,68 @@
                     <Setter Property="Background" Value="White"/>
                 </Trigger>
             </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для ComboBox -->
+        <Style x:Key="RoundedComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="Arial Rounded MT Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="BorderBrush" Value="#4CAF50"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            SnapsToDevicePixels="True">
+                                <DockPanel>
+                                    <ToggleButton x:Name="ToggleButton"
+                                          DockPanel.Dock="Right"
+                                          Focusable="False"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press"
+                                          Background="Transparent"
+                                          BorderBrush="{x:Null}">
+                                        <Path Fill="Gray"
+                                      Data="M 0 0 L 4 4 L 8 0 Z"
+                                      Margin="6,0"/>
+                                    </ToggleButton>
+                                    <ContentPresenter Margin="6,2,0,2"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              IsHitTestVisible="False"/>
+                                </DockPanel>
+                            </Border>
+                            <Popup x:Name="Popup"
+                           Placement="Bottom"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           PopupAnimation="Slide">
+                                <Border Background="White"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4">
+                                    <ScrollViewer>
+                                        <StackPanel IsItemsHost="True"
+                                            KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
@@ -63,28 +125,26 @@
                 <CheckBox x:Name="SaveOption2CheckBox"
                           Content="Середньомісячна температура та середній тиск"
                           VerticalAlignment="Center"/>
-
                 <TextBlock Width="15"/>
-
-                <ComboBox x:Name="MonthComboBox"
-                          Width="140"
-                          VerticalAlignment="Center"
-                          SelectedIndex="0"
-                          ToolTip="Оберіть місяць">
-                    <ComboBoxItem Content="Січень" Tag="1" />
-                    <ComboBoxItem Content="Лютий" Tag="2" />
-                    <ComboBoxItem Content="Березень" Tag="3" />
-                    <ComboBoxItem Content="Квітень" Tag="4" />
-                    <ComboBoxItem Content="Травень" Tag="5" />
-                    <ComboBoxItem Content="Червень" Tag="6" />
-                    <ComboBoxItem Content="Липень" Tag="7" />
-                    <ComboBoxItem Content="Серпень" Tag="8" />
-                    <ComboBoxItem Content="Вересень" Tag="9" />
-                    <ComboBoxItem Content="Жовтень" Tag="10" />
-                    <ComboBoxItem Content="Листопад" Tag="11" />
-                    <ComboBoxItem Content="Грудень" Tag="12" />
-                </ComboBox>
             </StackPanel>
+
+            <ComboBox x:Name="MonthComboBox"
+                      Style="{StaticResource RoundedComboBoxStyle}"
+                      SelectedIndex="0"
+                      ToolTip="Оберіть місяць">
+                <ComboBoxItem Content="Січень" Tag="1" />
+                <ComboBoxItem Content="Лютий" Tag="2" />
+                <ComboBoxItem Content="Березень" Tag="3" />
+                <ComboBoxItem Content="Квітень" Tag="4" />
+                <ComboBoxItem Content="Травень" Tag="5" />
+                <ComboBoxItem Content="Червень" Tag="6" />
+                <ComboBoxItem Content="Липень" Tag="7" />
+                <ComboBoxItem Content="Серпень" Tag="8" />
+                <ComboBoxItem Content="Вересень" Tag="9" />
+                <ComboBoxItem Content="Жовтень" Tag="10" />
+                <ComboBoxItem Content="Листопад" Tag="11" />
+                <ComboBoxItem Content="Грудень" Tag="12" />
+            </ComboBox>
 
             <Button Content="Зберегти файл"
                     x:Name="SaveFileButton"

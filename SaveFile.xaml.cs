@@ -30,13 +30,16 @@ namespace Погодка
 
             var weatherData = dbManager.GetAllWeatherData();
 
+            // Фільтруємо по місяцю для обох опцій
+            var monthData = weatherData.FindAll(day => day.Month == selectedMonthNumber);
+
             StringBuilder content = new StringBuilder();
 
             if (SaveOption1CheckBox.IsChecked == true)
             {
-                // Перша опція — без фільтрації по місяцю
+                // Фільтрація: температура > 0 і були опади в обраному місяці
                 var filteredDays = new List<string>();
-                foreach (var day in weatherData)
+                foreach (var day in monthData)
                 {
                     if (day.Temperature > 0 && day.Precipitation == "Так")
                     {
@@ -52,9 +55,6 @@ namespace Погодка
 
             if (SaveOption2CheckBox.IsChecked == true)
             {
-                // Друга опція — фільтруємо за вибраним місяцем
-                var monthData = weatherData.FindAll(day => day.Month == selectedMonthNumber);
-
                 if (monthData.Count > 0)
                 {
                     double avgTemp = 0;
@@ -105,5 +105,6 @@ namespace Погодка
                 }
             }
         }
+
     }
 }
