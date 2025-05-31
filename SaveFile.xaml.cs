@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using System.IO;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Погодка
 {
@@ -27,17 +29,13 @@ namespace Погодка
             }
 
             int selectedMonthNumber = int.Parse(selectedMonth.Tag.ToString());
-
             var weatherData = dbManager.GetAllWeatherData();
-
-            // Фільтруємо по місяцю для обох опцій
             var monthData = weatherData.FindAll(day => day.Month == selectedMonthNumber);
 
             StringBuilder content = new StringBuilder();
 
             if (SaveOption1CheckBox.IsChecked == true)
             {
-                // Фільтрація: температура > 0 і були опади в обраному місяці
                 var filteredDays = new List<string>();
                 foreach (var day in monthData)
                 {
@@ -87,16 +85,31 @@ namespace Погодка
 
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "Текстові файли (*.txt)|*.txt|Всі файли (*.*)|*.*",
-                Title = "Зберегти файл"
+                Filter = "Документ Word (*.docx)|*.docx|Всі файли (*.*)|*.*",
+                Title = "Зберегти документ Word"
             };
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 try
                 {
-                    File.WriteAllText(saveFileDialog.FileName, content.ToString(), Encoding.UTF8);
-                    MessageBox.Show("Файл успішно збережено!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                    using (WordprocessingDocument wordDoc = WordprocessingDocument.Create(
+                        saveFileDialog.FileName, DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
+                    {
+                        MainDocumentPart mainPart = wordDoc.AddMainDocumentPart();
+                        mainPart.Document = new Document();
+                        Body body = new Body();
+
+                        foreach (string line in content.ToString().Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+                        {
+                            body.AppendChild(new Paragraph(new Run(new Text(line))));
+                        }
+
+                        mainPart.Document.Append(body);
+                        mainPart.Document.Save();
+                    }
+
+                    MessageBox.Show("Файл успішно збережено у форматі .docx!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
                 }
                 catch (Exception ex)
@@ -106,5 +119,10 @@ namespace Погодка
             }
         }
 
+
     }
 }
+
+
+    
+
