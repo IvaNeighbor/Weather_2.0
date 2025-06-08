@@ -8,7 +8,9 @@ namespace Погодка
         private string userRole;
         DatabaseManager dbManager = new DatabaseManager();
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public MainWindow()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
             InitializeComponent();
             LoadWeatherData();
@@ -50,7 +52,7 @@ namespace Погодка
             }
             else
             {
-                MessageBox.Show("У вас немає доступу до редагування.", "Доступ заборонено", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Helpers.InfoShow("У вас немає доступу до редагування.", "Доступ заборонено");
             }
         }
 
@@ -83,7 +85,7 @@ namespace Погодка
 
                 if (weatherData == null || weatherData.Count == 0)
                 {
-                    MessageBox.Show("Дані відсутні у базі даних.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Helpers.InfoShow("Дані відсутні у базі даних.", "Інформація");
                     WeatherDataGrid.ItemsSource = null;
                 }
                 else
@@ -93,8 +95,8 @@ namespace Погодка
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Не вдалося завантажити базу даних:\n" + ex.Message,
-                                "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Helpers.ErrorShow("Не вдалося завантажити базу даних:\n" + ex.Message,
+                                "Помилка");
                 WeatherDataGrid.ItemsSource = null;
             }
         
@@ -124,13 +126,13 @@ namespace Погодка
 
                 if (filteredData.Count == 0)
                 {
-                    MessageBox.Show("За вашим фільтром дані не знайдені.", "Результат фільтрації", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Helpers.InfoShow("За вашим фільтром дані не знайдені.", "Результат фільтрації");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Помилка при завантаженні даних з фільтром:\n" + ex.Message,
-                                "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Helpers.ErrorShow("Помилка при завантаженні даних з фільтром:\n" + ex.Message,
+                                "Помилка");
             }
         }
 

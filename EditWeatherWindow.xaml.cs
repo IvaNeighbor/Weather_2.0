@@ -90,11 +90,11 @@ namespace Погодка
 
                     if (rowsAffected > 0)
                     {
-                        MessageBox.Show("Запис успішно додано або оновлено!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Helpers.InfoShow("Запис успішно додано або оновлено!", "Успіх");
                     }
                     else
                     {
-                        MessageBox.Show("Не вдалося додати або оновити запис.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Helpers.ErrorShow("Не вдалося додати або оновити запис.", "Помилка");
                     }
 
 
@@ -107,11 +107,11 @@ namespace Погодка
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show($"Помилка бази даних: {ex.Message}\nКод помилки: {ex.Number}", "Помилка DB", MessageBoxButton.OK, MessageBoxImage.Error);
+                Helpers.ErrorShow($"Помилка бази даних: {ex.Message}\nКод помилки: {ex.Number}", "Помилка DB");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Невідома помилка: {ex.Message}\nТип помилки: {ex.GetType().Name}", "Загальна помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Helpers.ErrorShow($"Невідома помилка: {ex.Message}\nТип помилки: {ex.GetType().Name}", "Загальна помилка");
             }
         }
 
@@ -121,7 +121,7 @@ namespace Погодка
             {
                 if (DeleteDateDatePicker.SelectedDate == null)
                 {
-                    MessageBox.Show("Будь ласка, оберіть дату для видалення.");
+                   Helpers.InfoShow("Будь ласка, оберіть дату для видалення.");
                     return;
                 }
 
@@ -142,14 +142,14 @@ namespace Погодка
                     int rows = cmd.ExecuteNonQuery();
 
                     if (rows > 0)
-                        MessageBox.Show($"Видалено запис");
+                        Helpers.InfoShow($"Видалено запис");
                     else
-                        MessageBox.Show("Запис за вказаною датою (день і місяць) не знайдено.");
+                        Helpers.InfoShow("Запис за вказаною датою (день і місяць) не знайдено.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Помилка видалення: " + ex.Message);
+                Helpers.ErrorShow("Помилка видалення: " + ex.Message);
             }
         }
     }

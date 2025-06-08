@@ -24,11 +24,23 @@ namespace Погодка
         {
             if (!(MonthComboBox.SelectedItem is ComboBoxItem selectedMonth))
             {
-                MessageBox.Show("Будь ласка, оберіть місяць.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Helpers.ErrorShow("Будь ласка, оберіть місяць.", "Помилка");
                 return;
             }
 
-            int selectedMonthNumber = int.Parse(selectedMonth.Tag.ToString());
+            int selectedMonthNumber = 10; 
+
+            if (selectedMonth?.Tag != null && int.TryParse(selectedMonth.Tag.ToString(), out selectedMonthNumber))
+            {
+                // успішно
+            }
+            else
+            {
+                Helpers.ErrorShow("Помилка: не вдалося визначити номер місяця.");
+            }
+
+            // selectedMonthNumber тут гарантовано ініціалізований
+
             var weatherData = dbManager.GetAllWeatherData();
             var monthData = weatherData.FindAll(day => day.Month == selectedMonthNumber);
 
@@ -36,15 +48,9 @@ namespace Погодка
 
             if (SaveOption1CheckBox.IsChecked == true)
             {
-                var filteredDays = new List<string>();
-                foreach (var day in monthData)
-                {
-                    if (day.Temperature > 0 && day.Precipitation == "Так")
-                    {
-                        string date = $"{day.Day:D2}.{day.Month:D2}.2025";
-                        filteredDays.Add(date);
-                    }
-                }
+                var filteredDays = WeatherProcessor.GetWarmRainyDays(monthData);
+
+
 
                 content.AppendLine("Кількість днів та дати, коли температура > 0 та йшов дощ:");
                 content.AppendLine($" - {filteredDays.Count} днів: {string.Join(", ", filteredDays)}");
@@ -55,14 +61,10 @@ namespace Погодка
             {
                 if (monthData.Count > 0)
                 {
-                    double avgTemp = 0;
-                    double avgPressure = 0;
+                    
 
-                    foreach (var w in monthData)
-                    {
-                        avgTemp += w.Temperature;
-                        avgPressure += w.Pressure;
-                    }
+                    var (avgTemp, avgPressure) = WeatherProcessor.GetAverages(monthData);
+
 
                     avgTemp /= monthData.Count;
                     avgPressure /= monthData.Count;
@@ -79,7 +81,7 @@ namespace Погодка
 
             if (content.Length == 0)
             {
-                MessageBox.Show("Будь ласка, оберіть принаймні одну опцію для збереження.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Helpers.ErrorShow("Будь ласка, оберіть принаймні одну опцію для збереження.", "Помилка");
                 return;
             }
 
@@ -109,20 +111,57 @@ namespace Погодка
                         mainPart.Document.Save();
                     }
 
-                    MessageBox.Show("Файл успішно збережено у форматі .docx!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Helpers.InfoShow("Файл успішно збережено у форматі .docx!", "Успіх");
                     this.Close();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Сталася помилка при збереженні файлу:\n" + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Helpers.ErrorShow("Сталася помилка при збереженні файлу:\n" + ex.Message, "Помилка");
                 }
             }
         }
 
 
     }
+
+    public static class WeatherProcessor
+    {
+        public static List<string> GetWarmRainyDays(List<WeatherInfo> monthData)
+        {
+            var result = new List<string>();
+
+            foreach (var day in monthData)
+            {
+                if (day.Temperature > 0 && day.Precipitation == "Так")
+                {
+                    string date = $"{day.Day:D2}.{day.Month:D2}.2025";
+                    result.Add(date);
+                }
+            }
+
+            return result;
+        }
+
+        public static (double avgTemp, double avgPressure) GetAverages(List<WeatherInfo> monthData)
+        {
+            if (monthData == null || monthData.Count == 0)
+                return (0, 0);
+
+            double tempSum = 0;
+            double pressureSum = 0;
+
+            foreach (var item in monthData)
+            {
+                tempSum += item.Temperature;
+                pressureSum += item.Pressure;
+            }
+
+            return (tempSum / monthData.Count, pressureSum / monthData.Count);
+        }
+    }
+
 }
 
 
-    
+
 
